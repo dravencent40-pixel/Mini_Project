@@ -6,39 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('student_id')->constrained()->cascadeOnDelete();
-
-            $table->date('attendance_date');
-
-            $table->enum('status', [
-                'Hadir',
-                'Sakit',
-                'Izin',
-                'Alpha'
-            ]);
-
-            $table->text('notes')->nullable();
-
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->date('date');
+            $table->enum('status', ['hadir', 'sakit', 'izin', 'alpa']); // Status absensi
+            $table->text('note')->nullable();
             $table->timestamps();
 
-            $table->unique([
-                'student_id',
-                'attendance_date'
-            ]);
+            // Business Rule: Satu siswa hanya boleh 1 absensi per hari (mencegah duplikat)[cite: 1]
+            $table->unique(['student_id', 'date']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('attendances');
