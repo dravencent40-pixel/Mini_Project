@@ -1,27 +1,27 @@
 <?php
 
-use App\Livewire\Dashboard;
-use App\Livewire\Students\Index as StudentIndex;
-use App\Livewire\Classrooms\Index as ClassroomIndex;
+use App\Livewire\Auth\Login;
+use App\Livewire\Student\Index as StudentIndex;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-Route::view('/', 'welcome');
-
-Route::middleware(['auth'])->group(function () {
-
-    Route::get('/dashboard', Dashboard::class)
-        ->name('dashboard');
-
-    Route::get('/students', StudentIndex::class)
-        ->name('students.index');
-
-    Route::get('/classrooms', ClassroomIndex::class)
-        ->name('classrooms.index');
-
+Route::get('/', function () {
+    return redirect()->route('login');
 });
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+Route::get('/login', Login::class)->name('login')->middleware('guest');
 
-require __DIR__.'/auth.php';
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', function () {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        return redirect()->route('login');
+    })->name('logout');
+
+    Route::get('/students', StudentIndex::class)->name('students.index');
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});

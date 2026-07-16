@@ -1,36 +1,38 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <livewire:layout.navigation />
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance System</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+    @auth
+    <nav x-data="{ open: false }" class="bg-blue-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <span class="font-bold text-lg">Absensi Siswa</span>
+                    <a href="/dashboard" class="hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="/students" class="hover:bg-blue-800 px-3 py-2 rounded-md text-sm font-medium">Data Siswa</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm bg-blue-800 px-3 py-1 rounded-full">{{ Auth::user()->name }} ({{ Auth::user()->role }})</span>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="text-sm bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-md">Logout</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </body>
+    </nav>
+    @endauth
+
+    <main class="py-6">
+        {{ $slot }}
+    </main>
+
+    @livewireScripts
+</body>
 </html>
