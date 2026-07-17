@@ -1,9 +1,15 @@
 <?php
 
+use App\Livewire\Dashboard;
 use App\Livewire\Auth\Login;
 use App\Livewire\Student\Index as StudentIndex;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Livewire\Attendance\Form as AttendanceForm;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/attendances/input', AttendanceForm::class)->name('attendances.input');
+});
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -21,7 +27,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/students', StudentIndex::class)->name('students.index');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::middleware(['auth'])->group(function () {
+        // Arahkan /dashboard langsung ke Class Livewire Dashboard
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+        // Route lainnya...
+        Route::get('/attendances/input', \App\Livewire\Attendance\Form::class)->name('attendances.input');
+    });
 });

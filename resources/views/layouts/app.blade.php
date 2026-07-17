@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Attendance System</title>
+    <a href="{{ route('attendances.input') }}" class="text-white hover:text-gray-200 font-medium text-sm">
+        Input Absensi
+    </a>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
