@@ -41,7 +41,7 @@
                     <tr>
                         <td class="px-6 py-4 font-medium text-gray-900">{{ $student->nisn }}</td>
                         <td class="px-6 py-4 text-gray-700">{{ $student->name }}</td>
-                        <td class="px-6 py-4 text-gray-700">{{ $student->classModel->name }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ $student->class?->name ?? 'Tanpa Kelas' }}</td>
                         <td class="px-6 py-4 text-gray-700">{{ $student->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                         <td class="px-6 py-4 text-right space-x-2">
                             <button wire:click="edit({{ $student->id }})" class="text-blue-600 hover:underline">Edit</button>
